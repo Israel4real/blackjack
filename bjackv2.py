@@ -47,6 +47,12 @@ class Card(object):
             suit = " of Clubs"
         return str(face) + suit
 
+    def card_value(self):
+        face_values = {0: 1, 1: 10, 11: 10, 12: 10}
+        if self.face in face_values:
+            return face_values[self.face]
+        else:
+            return self.face
 
 
 class Hand(object):
@@ -95,5 +101,4 @@ testengine = Game("Jack")
 testengine.play()
 
 testengine.player.hand.draw(testengine.deck.deal())
-for i in range(len(testengine.deck.cards)):
-    print testengine.deck.cards[i].card_name()
+print testengine.deck.cards[31].card_value()

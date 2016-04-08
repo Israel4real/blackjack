@@ -76,14 +76,19 @@ def game():
         return pts
 
     def score(value):
-        if value % 13 is 0:
-            return 1
-        elif value % 13 is 1:
-            return 10
-        elif value % 13 > 10:
-            return 10
+        face_values = {0: 1, 1: 10, 11: 10, 12: 10}
+        if value % 13 in face_values:
+            return face_values[value % 13]
         else:
             return value % 13
+        # if value % 13 is 0:
+        #     return 1
+        # elif value % 13 is 1:
+        #     return 10
+        # elif value % 13 > 10:
+        #     return 10
+        # else:
+        #     return value % 13
 
     def winCondition():
         if calScore(playerOne.hand) == 21 and phase == 0:
@@ -125,3 +130,4 @@ def game():
     createPlayer()
     startUI()
 
+game()
