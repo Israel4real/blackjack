@@ -64,6 +64,11 @@ class Hand(object):
     def draw(self, drawn_card):
         self.holding.append(drawn_card)
 
+    def calculate_score(self):
+        if len(self.holding) > 1:
+            for card in self.holding:
+                self.total_pts += card.card_value
+
     def return_cards(self):
         self.holding = []
 
@@ -101,4 +106,4 @@ testengine = Game("Jack")
 testengine.play()
 
 testengine.player.hand.draw(testengine.deck.deal())
-print testengine.deck.cards[31].card_value()
+print testengine.player.hand.holding[0].id_number
