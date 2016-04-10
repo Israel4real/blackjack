@@ -3,7 +3,7 @@ import random
 class Deck(object):
     """ Deck class - deck creation, shuffle, dealing """
     def __init__(self):
-        self.cards = [Card(i) for i in range(53)]
+        self.cards = [Card(i) for i in range(52)]
 
     def shuffle(self):
         return random.shuffle(self.cards)
@@ -13,10 +13,10 @@ class Deck(object):
 
     def list(self):
         for i in self.cards:
-            print i
+            print i.card_name()
 
     def reset_deck(self):
-        self.cards = [Card(i) for i in range(53)]
+        self.cards = [Card(i) for i in range(52)]
 
 class Card(object):
     """ Holds card face/value and suit """
@@ -27,7 +27,7 @@ class Card(object):
 
     def card_name(self):
         """ Returns the card's name """
-        face, suit = self.face, " "
+        face, suit = self.face, " err suit"
         if self.face == 0:
             face = "Ace"
         elif self.face == 1:
@@ -45,6 +45,7 @@ class Card(object):
             suit = " of Diamonds"
         elif self.suit == 3:
             suit = " of Clubs"
+
         return str(face) + suit
 
     def card_value(self):
@@ -63,14 +64,18 @@ class Hand(object):
 
     def draw(self, drawn_card):
         self.holding.append(drawn_card)
+        if drawn_card.face == 0 and self.total_pts < 11:
+            self.total_pts += 11
+        else:
+            self.total_pts += drawn_card.card_value()
 
-    def calculate_score(self):
-        if len(self.holding) > 1:
-            for card in self.holding:
-                self.total_pts += card.card_value
+    def list_cards(self):
+        for card in self.holding:
+            print card.card_name()
 
-    def return_cards(self):
+    def reset_player(self):
         self.holding = []
+        self.total_pts = 0
 
 class Player(object):
     """Player class - name, credits, hand"""
@@ -94,16 +99,23 @@ class Game(object):
 
     def display(self):
         print "-" * 50
-        print "|\n" * 10 + "|"
+        print " \n" * 5
         print self.player.name
+        self.player.hand.list_cards()
+        print "\n Current Score:", self.player.hand.total_pts
         print "-" * 50
         print "   --- (H)Hit -- (S)Stand -- (Q)Quit ---"
 
     def play(self):
+        self.deck.shuffle()
+        self.player.hand.draw(self.deck.deal())
+        self.player.hand.draw(self.deck.deal())
         self.display()
 
-testengine = Game("Jack")
+testengine = Game("Koko Yoko")
 testengine.play()
 
-testengine.player.hand.draw(testengine.deck.deal())
-print testengine.player.hand.holding[0].id_number
+# testengine.player.hand.draw(testengine.deck.deal())
+# print testengine.player.hand.holding[0].id_number
+# testengine.player.hand.list_cards()
+# testengine.deck.list()
